@@ -1,0 +1,157 @@
+Server is running on port 5000
+Successfully connected to PostgreSQL database
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%",10,0]
+SQL QUERY: BEGIN
+SQL PARAMS: undefined
+SQL QUERY: DELETE FROM rules WHERE step_id IN (SELECT id FROM steps WHERE workflow_id = $1)
+SQL PARAMS: ["a6ce2a8d-b950-480d-a033-c9eac35dec89"]
+SQL QUERY: DELETE FROM executions WHERE workflow_id = $1
+SQL PARAMS: ["a6ce2a8d-b950-480d-a033-c9eac35dec89"]
+SQL QUERY: DELETE FROM steps WHERE workflow_id = $1
+SQL PARAMS: ["a6ce2a8d-b950-480d-a033-c9eac35dec89"]
+SQL QUERY: DELETE FROM workflows WHERE id = $1 RETURNING *
+SQL PARAMS: ["a6ce2a8d-b950-480d-a033-c9eac35dec89"]
+SQL QUERY: COMMIT
+SQL PARAMS: undefined
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT id, workflow_id, status, triggered_by, started_at, ended_at FROM executions ORDER BY started_at DESC LIMIT $1 OFFSET $2
+SQL PARAMS: ["15",0]
+SQL QUERY: SELECT id, workflow_id, status, triggered_by, started_at, ended_at FROM executions ORDER BY started_at DESC LIMIT $1 OFFSET $2
+SQL PARAMS: ["15",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT id, workflow_id, status, triggered_by, started_at, ended_at FROM executions ORDER BY started_at DESC LIMIT $1 OFFSET $2
+SQL PARAMS: ["15",0]
+SQL QUERY: SELECT id, workflow_id, status, triggered_by, started_at, ended_at FROM executions ORDER BY started_at DESC LIMIT $1 OFFSET $2
+SQL PARAMS: ["15",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: INSERT INTO workflows (id, name, input_schema, start_step_id) VALUES ($1, $2, $3, $4) RETURNING *
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb","Expense Approval",{"properties":[{"name":"amount","type":"number","required":true},{"name":"country","type":"string","required":true},{"name":"department","type":"string","required":false},{"name":"priority","type":"string","required":false,"allowed_values":["High","Medium","Low"]}]},null]
+SQL QUERY: INSERT INTO steps (id, workflow_id, name, step_type, step_order, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
+SQL PARAMS: ["28c0bab0-b091-4764-b87a-38d1e22257db","f60365ec-243f-4606-aeaa-7bf96602d8cb","Manager Approval","approval",1,null]
+SQL QUERY: INSERT INTO steps (id, workflow_id, name, step_type, step_order, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
+SQL PARAMS: ["36cd9367-ddbc-48d5-b524-bb792da08793","f60365ec-243f-4606-aeaa-7bf96602d8cb","Finance Notification","notification",2,null]
+SQL QUERY: INSERT INTO steps (id, workflow_id, name, step_type, step_order, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
+SQL PARAMS: ["944041b2-6f69-4173-ac8f-93aece8074e2","f60365ec-243f-4606-aeaa-7bf96602d8cb","CEO Approval","approval",3,null]
+SQL QUERY: INSERT INTO steps (id, workflow_id, name, step_type, step_order, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *
+SQL PARAMS: ["d6142074-e462-4b7f-8eca-ccbf00a78395","f60365ec-243f-4606-aeaa-7bf96602d8cb","Task Rejection","task",4,null]
+SQL QUERY: UPDATE workflows SET name = COALESCE($1, name), is_active = COALESCE($2, is_active), input_schema = COALESCE($3, input_schema), start_step_id = COALESCE($4, start_step_id), version = version + 1, updated_at = CURRENT_TIMESTAMP WHERE id = $5 RETURNING *
+SQL PARAMS: [null,null,null,"28c0bab0-b091-4764-b87a-38d1e22257db","f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: INSERT INTO rules (id, step_id, condition, next_step_id, priority) VALUES ($1, $2, $3, $4, $5) RETURNING *
+SQL PARAMS: ["7c0d5b5a-6328-4a6f-9075-79cc62967856","28c0bab0-b091-4764-b87a-38d1e22257db","amount > 100 && country == 'US' && priority == 'High'","36cd9367-ddbc-48d5-b524-bb792da08793",1]
+SQL QUERY: INSERT INTO rules (id, step_id, condition, next_step_id, priority) VALUES ($1, $2, $3, $4, $5) RETURNING *
+SQL PARAMS: ["2d1e6aea-2f98-4861-b7f3-b12af33676be","28c0bab0-b091-4764-b87a-38d1e22257db","amount <= 100","944041b2-6f69-4173-ac8f-93aece8074e2",2]
+SQL QUERY: INSERT INTO rules (id, step_id, condition, next_step_id, priority) VALUES ($1, $2, $3, $4, $5) RETURNING *
+SQL PARAMS: ["dd5620a9-3685-4e96-81af-78010e12de48","28c0bab0-b091-4764-b87a-38d1e22257db","DEFAULT","d6142074-e462-4b7f-8eca-ccbf00a78395",3]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE id = $1
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: SELECT * FROM steps WHERE workflow_id = $1 ORDER BY step_order
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["28c0bab0-b091-4764-b87a-38d1e22257db"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["36cd9367-ddbc-48d5-b524-bb792da08793"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["944041b2-6f69-4173-ac8f-93aece8074e2"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["d6142074-e462-4b7f-8eca-ccbf00a78395"]
+SQL QUERY: SELECT * FROM workflows WHERE id = $1
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: SELECT * FROM steps WHERE workflow_id = $1 ORDER BY step_order
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["28c0bab0-b091-4764-b87a-38d1e22257db"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["36cd9367-ddbc-48d5-b524-bb792da08793"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["944041b2-6f69-4173-ac8f-93aece8074e2"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["d6142074-e462-4b7f-8eca-ccbf00a78395"]
+SQL QUERY: SELECT * FROM workflows WHERE id = $1
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: INSERT INTO executions (id, workflow_id, workflow_version, status, data, current_step_id, triggered_by) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *
+SQL PARAMS: ["8cb12d27-afd4-4900-be72-4506f9c4058e","f60365ec-243f-4606-aeaa-7bf96602d8cb",2,"in_progress",{"amount":100,"country":"us","department":"food","priority":""},"28c0bab0-b091-4764-b87a-38d1e22257db","Dashboard User"]
+Execution started: 8cb12d27-afd4-4900-be72-4506f9c4058e
+SQL QUERY: SELECT status FROM executions WHERE id = $1
+SQL PARAMS: ["8cb12d27-afd4-4900-be72-4506f9c4058e"]
+SQL QUERY: SELECT * FROM steps WHERE id = $1
+SQL PARAMS: ["28c0bab0-b091-4764-b87a-38d1e22257db"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["28c0bab0-b091-4764-b87a-38d1e22257db"]
+SQL QUERY: UPDATE executions SET status = $1, current_step_id = $2 WHERE id = $3
+SQL PARAMS: ["pending_approval","28c0bab0-b091-4764-b87a-38d1e22257db","8cb12d27-afd4-4900-be72-4506f9c4058e"]
+Step Manager Approval (28c0bab0-b091-4764-b87a-38d1e22257db) is waiting for approval.
+Evaluating 3 rules against inputData: { amount: 100, country: 'us', department: 'food', priority: '' }
+Rule ID: 7c0d5b5a-6328-4a6f-9075-79cc62967856 | Condition: "amount > 100 && country == 'US' && priority == 'High'" | Match: false
+Rule ID: 2d1e6aea-2f98-4861-b7f3-b12af33676be | Condition: "amount <= 100" | Match: true
+SQL QUERY: UPDATE executions SET logs = logs || ARRAY[$1::jsonb], current_step_id = $2 WHERE id = $3
+SQL PARAMS: ["{\"step_id\":\"28c0bab0-b091-4764-b87a-38d1e22257db\",\"step_name\":\"Manager Approval\",\"step_type\":\"approval\",\"evaluated_rules\":3,\"selected_next_step\":\"944041b2-6f69-4173-ac8f-93aece8074e2\",\"status\":\"pending_approval\",\"started_at\":\"2026-03-17T18:33:20.564Z\",\"ended_at\":\"2026-03-17T18:33:20.669Z\"}","944041b2-6f69-4173-ac8f-93aece8074e2","8cb12d27-afd4-4900-be72-4506f9c4058e"]
+SQL QUERY: UPDATE executions SET status = $1 WHERE id = $2
+SQL PARAMS: ["completed","8cb12d27-afd4-4900-be72-4506f9c4058e"]
+SQL QUERY: SELECT * FROM executions WHERE id = $1
+SQL PARAMS: ["8cb12d27-afd4-4900-be72-4506f9c4058e"]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",10]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE id = $1
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: SELECT * FROM steps WHERE workflow_id = $1 ORDER BY step_order
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["28c0bab0-b091-4764-b87a-38d1e22257db"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["36cd9367-ddbc-48d5-b524-bb792da08793"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["944041b2-6f69-4173-ac8f-93aece8074e2"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["d6142074-e462-4b7f-8eca-ccbf00a78395"]
+SQL QUERY: SELECT * FROM workflows WHERE id = $1
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: SELECT * FROM steps WHERE workflow_id = $1 ORDER BY step_order
+SQL PARAMS: ["f60365ec-243f-4606-aeaa-7bf96602d8cb"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["28c0bab0-b091-4764-b87a-38d1e22257db"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["36cd9367-ddbc-48d5-b524-bb792da08793"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["944041b2-6f69-4173-ac8f-93aece8074e2"]
+SQL QUERY: SELECT * FROM rules WHERE step_id = $1 ORDER BY priority
+SQL PARAMS: ["d6142074-e462-4b7f-8eca-ccbf00a78395"]
+SQL QUERY: SELECT id, workflow_id, status, triggered_by, started_at, ended_at FROM executions ORDER BY started_at DESC LIMIT $1 OFFSET $2
+SQL PARAMS: ["15",0]
+SQL QUERY: SELECT id, workflow_id, status, triggered_by, started_at, ended_at FROM executions ORDER BY started_at DESC LIMIT $1 OFFSET $2
+SQL PARAMS: ["15",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]
+SQL QUERY: SELECT * FROM workflows WHERE name ILIKE $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3
+SQL PARAMS: ["%%","10",0]

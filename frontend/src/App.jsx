@@ -16,10 +16,35 @@ import Approvals from './pages/Approvals';
 // Theme Context
 export const ThemeContext = createContext();
 
+// Simple Error Boundary
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) { return { hasError: true }; }
+  componentDidCatch(error, errorInfo) { console.error("UI Crash:", error, errorInfo); }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex items-center justify-center min-h-screen bg-zinc-950 text-emerald-500 font-bold p-10 text-center">
+          <div>
+            <h1 className="text-4xl mb-4">🛸 LOGIC BREACH</h1>
+            <p className="text-zinc-500 uppercase tracking-widest text-xs">The UI has encountered an unhandled exception in the production layer.</p>
+            <button onClick={() => window.location.reload()} className="mt-8 px-6 py-2 border border-emerald-500/20 rounded-full hover:bg-emerald-500/10 transition-all">REBOOT SYSTEM</button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
   useEffect(() => {
+    console.log("🚀 App Initialized | Theme:", theme);
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
@@ -28,26 +53,28 @@ function App() {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <Router>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+      <ErrorBoundary>
+        <Router>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          {/* Protected routes wrapped in Layout */}
-          <Route element={<ProtectedRoute><Layout><div /></Layout></ProtectedRoute>}>
-             <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><Layout><Dashboard /></Layout></ProtectedRoute>} />
-             <Route path="/workflows" element={<ProtectedRoute><Layout><WorkflowList /></Layout></ProtectedRoute>} />
-             <Route path="/workflow/:id" element={<ProtectedRoute><Layout><WorkflowEditor /></Layout></ProtectedRoute>} />
-             <Route path="/rules/:id" element={<ProtectedRoute><Layout><RuleEditor /></Layout></ProtectedRoute>} />
-             <Route path="/execute/:id" element={<ProtectedRoute><Layout><ExecutionView /></Layout></ProtectedRoute>} />
-             <Route path="/approvals" element={<ProtectedRoute allowedRoles={['manager', 'ceo', 'admin']}><Layout><Approvals /></Layout></ProtectedRoute>} />
-             <Route path="/audit" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'ceo']}><Layout><AuditLog /></Layout></ProtectedRoute>} />
-          </Route>
+            {/* Protected routes wrapped in Layout */}
+            <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+               <Route index element={<Navigate to="/workflows" replace />} />
+               <Route path="/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><Dashboard /></ProtectedRoute>} />
+               <Route path="/workflows" element={<WorkflowList />} />
+               <Route path="/workflow/:id" element={<WorkflowEditor />} />
+               <Route path="/rules/:id" element={<RuleEditor />} />
+               <Route path="/execute/:id" element={<ExecutionView />} />
+               <Route path="/approvals" element={<ProtectedRoute allowedRoles={['manager', 'ceo', 'admin']}><Approvals /></ProtectedRoute>} />
+               <Route path="/audit" element={<ProtectedRoute allowedRoles={['admin', 'manager', 'ceo']}><AuditLog /></ProtectedRoute>} />
+            </Route>
 
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/workflows" replace />} />
-        </Routes>
+            {/* Default redirect */}
+            <Route path="*" element={<Navigate to="/workflows" replace />} />
+          </Routes>
 
         <Toaster position="bottom-right" toastOptions={{
           style: {

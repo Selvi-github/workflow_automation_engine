@@ -1,10 +1,14 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Outlet } from 'react-router-dom';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const location = useLocation();
+
+  React.useEffect(() => {
+    console.log("📍 Layout Mounting | Path:", location.pathname);
+  }, [location.pathname]);
 
   return (
     <div className="flex min-h-screen transition-colors duration-500 font-['Plus_Jakarta_Sans'] overflow-hidden">
@@ -19,7 +23,7 @@ const Layout = ({ children }) => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             >
-              {children}
+              <Outlet />
             </motion.div>
           </AnimatePresence>
         </div>

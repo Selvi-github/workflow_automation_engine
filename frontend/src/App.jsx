@@ -90,7 +90,8 @@ function App() {
             border: '1px solid var(--glass-border)'
           }
         }} />
-      </Router>
+        </Router>
+      </ErrorBoundary>
     </ThemeContext.Provider>
   );
 }

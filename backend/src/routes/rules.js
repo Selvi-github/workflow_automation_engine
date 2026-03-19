@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/db');
 const { v4: uuidv4 } = require('uuid');
+const { validateRule } = require('../middleware/validation');
 
 // POST /steps/:step_id/rules → add rule
-router.post('/steps/:step_id/rules', async (req, res) => {
+router.post('/steps/:step_id/rules', validateRule, async (req, res) => {
     const { step_id } = req.params;
     const { condition, next_step_id, priority } = req.body;
     const id = uuidv4();
@@ -36,7 +37,7 @@ router.get('/steps/:step_id/rules', async (req, res) => {
 });
 
 // PUT /rules/:id → update rule
-router.put('/rules/:id', async (req, res) => {
+router.put('/rules/:id', validateRule, async (req, res) => {
     const { id } = req.params;
     const { condition, next_step_id, priority } = req.body;
     try {

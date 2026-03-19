@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/db');
 const { v4: uuidv4 } = require('uuid');
+const { validateStep } = require('../middleware/validation');
 
 // GET /steps/:id → get step details
 router.get('/steps/:id', async (req, res) => {
@@ -17,7 +18,7 @@ router.get('/steps/:id', async (req, res) => {
 });
 
 // POST /workflows/:workflow_id/steps → add step
-router.post('/workflows/:workflow_id/steps', async (req, res) => {
+router.post('/workflows/:workflow_id/steps', validateStep, async (req, res) => {
     const { workflow_id } = req.params;
     const { name, step_type, step_order, metadata } = req.body;
     const id = uuidv4();
@@ -49,7 +50,7 @@ router.get('/workflows/:workflow_id/steps', async (req, res) => {
 });
 
 // PUT /steps/:id → update step
-router.put('/steps/:id', async (req, res) => {
+router.put('/steps/:id', validateStep, async (req, res) => {
     const { id } = req.params;
     const { name, step_type, step_order, metadata } = req.body;
     try {

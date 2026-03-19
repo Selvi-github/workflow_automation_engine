@@ -36,7 +36,7 @@ async function startExecution(workflowId, inputData, triggeredBy) {
             [executionId, workflowId, workflow.version, 'in_progress', inputData, workflow.start_step_id, triggeredBy]
         );
 
-        console.log(`Execution started: ${executionId}`);
+        console.log(`[EXECUTION] [START] ID: ${executionId} | Workflow: ${workflowId} | Triggered By: ${triggeredBy}`);
 
         // 3. Begin step execution
         if (workflow.start_step_id) {
@@ -108,7 +108,7 @@ async function executeStep(executionId, stepId, inputData) {
         if (step.step_type === 'approval') {
             status = 'pending_approval';
             await updateExecutionStatus(executionId, 'in_progress', null, stepId);
-            console.log(`Step ${step.name} (${stepId}) is waiting for approval.`);
+            console.log(`[EXECUTION] [PENDING] Step: ${step.name} (${stepId}) awaiting human signal.`);
             const appEndedAt = new Date();
             logEntry = {
                 step_id: stepId,
@@ -136,6 +136,7 @@ async function executeStep(executionId, stepId, inputData) {
                 for (const email of emails) {
                     await sendApprovalEmail(email, step.name, workflowName, inputData, executionId);
                 }
+                console.log(`[EXECUTION] [NOTIFY] Approval requested from: ${emails.join(', ')}`);
             }
             return 'paused';
         }
@@ -153,7 +154,7 @@ async function executeStep(executionId, stepId, inputData) {
                     const workflowName = wfRes.rows[0]?.name || 'Workflow';
                     
                     const emailResult = await sendNotificationEmail(email, `🔔 Notification: ${step.name}`, step.name, workflowName, inputData);
-                    console.log(`NOTIFICATION ${emailResult.success ? 'SENT' : 'FAILED'}: ${step.name} to ${email}`);
+                    console.log(`[EXECUTION] [NOTIFY] ${emailResult.success ? 'SUCCESS' : 'FAILED'}: ${step.name} -> ${email}`);
                     
                     // Add email status to log entry
                     status = emailResult.success ? 'completed' : 'notification_failed';
@@ -168,7 +169,7 @@ async function executeStep(executionId, stepId, inputData) {
                 const { url, method = 'POST', headers = {}, body = null } = step.metadata || {};
                 if (url) {
                     try {
-                        console.log(`WEBHOOK INITIATED: ${method} ${url}`);
+                        console.log(`[EXECUTION] [WEBHOOK] INITIATED: ${method} ${url}`);
                         const response = await axios({
                             method,
                             url,
@@ -179,7 +180,7 @@ async function executeStep(executionId, stepId, inputData) {
                             data: body || inputData,
                             timeout: 10000
                         });
-                        console.log(`WEBHOOK SUCCESS: ${step.name} (${response.status})`);
+                        console.log(`[EXECUTION] [WEBHOOK] SUCCESS: ${step.name} (Status: ${response.status})`);
                         status = 'completed';
                         logEntry.webhook_response = {
                             status: response.status,
@@ -215,6 +216,8 @@ async function executeStep(executionId, stepId, inputData) {
         const evalResult = await evaluateRules(rules, context);
         nextStepId = evalResult.nextStepId;
         const evaluatedRules = evalResult.evaluatedRules;
+
+        console.log(`[EXECUTION] [RULE] Step: ${step.name} | Result: ${nextStepId || 'END'} | Matched: ${evaluatedRules.find(r => r.result)?.rule || 'NONE'}`);
 
         const endedAt = new Date();
 

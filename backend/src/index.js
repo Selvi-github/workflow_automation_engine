@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 process.on('unhandledRejection', (reason, promise) => {
@@ -22,18 +23,22 @@ const authRoutes = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:5000', 'https://workflow-automation-engine-1.onrender.com'],
+    credentials: true
+}));
 app.use(express.json());
 
-// Routes
+// API Routes
 app.use('/api/workflows', workflowRoutes);
 app.use('/api', stepRoutes); 
 app.use('/api', ruleRoutes); 
 app.use('/api', executionRoutes); 
 app.use('/api/auth', authRoutes);
 
-app.get('/', (req, res) => {
-    res.send('Workflow Engine API is running on port 5000');
+// The "catchall" handler for all other routes
+app.get('*', (req, res) => {
+  res.status(404).json({ message: 'API route not found' });
 });
 
 app.listen(PORT, () => {

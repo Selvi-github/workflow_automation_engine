@@ -125,9 +125,13 @@ async function executeStep(executionId, stepId, inputData) {
                 'UPDATE executions SET logs = logs || ARRAY[$1::jsonb], current_step_id = $2 WHERE id = $3',
                 [JSON.stringify(logEntry), stepId, executionId]
             );
-            // 2b. Role-based notification
+            // 2b. Role-based notification - Send to all relevant signatory roles
             const requiredRole = step.metadata?.required_role || 'manager';
-            const usersRes = await db.query('SELECT email FROM users WHERE role = $1 OR role = $2', [requiredRole, 'admin']);
+            const approverRoles = ['admin', 'ceo', 'manager', requiredRole];
+            const usersRes = await db.query(
+                'SELECT DISTINCT email FROM users WHERE role = ANY($1)', 
+                [approverRoles]
+            );
             const emails = usersRes.rows.map(u => u.email);
             
             if (emails.length > 0) {

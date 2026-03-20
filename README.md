@@ -33,7 +33,8 @@ A powerful, visual workflow automation system that allows users to design comple
 - **Communication**: Axios, Nodemailer
 
 ---
-
+## Demo
+[Watch Demo Video](https://youtu.be/QHHrihLKotg)
 ## 🏃 Setup Instructions
 
 ### Prerequisites

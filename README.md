@@ -34,7 +34,7 @@ A powerful, visual workflow automation system that allows users to design comple
 
 ---
 ## Demo
-[Watch Demo Video](https://youtu.be/QHHrihLKotg)
+[Watch Demo Video](https://youtu.be/XdZpJtKjZQA?si=pQ429O73ZpeMpPRk)
 ## 🏃 Setup Instructions
 
 ### Prerequisites

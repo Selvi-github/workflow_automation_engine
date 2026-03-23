@@ -78,7 +78,7 @@ async function sendApprovalEmail(to, stepName, workflowName, inputData, executio
   };
 
   // Construct login link
-  const loginLink = `http://localhost:5173/login`;
+  const loginLink = `${process.env.FRONTEND_URL || 'https://workflow-automation-engine-w0gj.onrender.com'}/login`;
 
   sendSmtpEmail.htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">

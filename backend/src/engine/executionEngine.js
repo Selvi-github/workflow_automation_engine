@@ -157,11 +157,11 @@ async function executeStep(executionId, stepId, inputData) {
                     const wfRes = await db.query('SELECT name FROM workflows WHERE id = $1', [step.workflow_id]);
                     const workflowName = wfRes.rows[0]?.name || 'Workflow';
                     
-                    const emailResult = await sendNotificationEmail(email, `🔔 Notification: ${step.name}`, step.name, workflowName, inputData);
-                    console.log(`[EXECUTION] [NOTIFY] ${emailResult.success ? 'SUCCESS' : 'FAILED'}: ${step.name} -> ${email}`);
+                    const emailSent = await sendNotificationEmail(email, `🔔 Notification: ${step.name}`, step.name, workflowName, inputData);
+                    console.log(`[EXECUTION] [NOTIFY] ${emailSent ? 'SUCCESS' : 'FAILED'}: ${step.name} -> ${email}`);
                     
                     // Add email status to log entry
-                    status = emailResult.success ? 'completed' : 'notification_failed';
+                    status = emailSent ? 'completed' : 'notification_failed';
                 } else {
                     console.log(`NOTIFICATION SKIPPED: No email in metadata for ${step.name}`);
                 }

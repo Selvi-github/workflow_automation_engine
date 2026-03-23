@@ -33,8 +33,15 @@ A powerful, visual workflow automation system that allows users to design comple
 - **Communication**: Axios, Nodemailer
 
 ---
-## Demo
-[Watch Demo Video](https://youtu.be/XdZpJtKjZQA)
+
+## 🌐 Live Demo
+
+🚀 **Deployed App**: [https://workflow-automation-engine-w0gj.onrender.com](https://workflow-automation-engine-w0gj.onrender.com)
+
+🎬 **Demo Video**: [Watch on YouTube](https://youtu.be/XdZpJtKjZQA)
+
+---
+
 ## 🏃 Setup Instructions
 
 ### Prerequisites
@@ -103,4 +110,3 @@ The system includes two pre-configured sample workflows:
 - **UI/UX**: Prioritized premium feel with micro-animations via `framer-motion` and clear operational feedback.
 
 ---
-*Created by Antigravity for the Halleyx Full Stack Engineer Challenge.*
